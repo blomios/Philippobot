@@ -11,8 +11,8 @@ const tmiConfig = {
         reconnect:  true
     },
     identity: {
-        username: "philippobot",
-        password: "oauth:5a6vidlute4ivirgb3a2nac9k4ov75"
+        username: "philippobottest",
+        password: "oauth:3l93201zmzuxmrfgxvqpqt468rxxyn"
     },
     channels: [
         "Blomios"
@@ -41,7 +41,7 @@ let client = new tmi.client(tmiConfig);
 
 client.connect();
 
-let format = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+let format = /[ !@#$%^&*()_+=\[\]{};':"\\|,.<>\/?]/;
 
 function parseWord(word){
 
@@ -73,6 +73,31 @@ function alreadyExistInFile(file, word, callback){
     });
 }
 
+function checkForSeveralLetters(word, nbMaxLetters){
+
+    let lastLetter = word[0];
+    let nb = 1;
+
+    for(let i = 1; i < word.length; i++){
+
+        if(word[i] == lastLetter){
+            nb++;
+            lastLetter = word[i];
+
+            if(nb == nbMaxLetters){
+                console.log(true);
+                return true;
+            }
+        }
+        else
+            nb = 0;
+
+    }
+    console.log(false);
+    return false;
+
+}
+
 client.on('chat', (channel, user, message, isSelf) => {
 
     let words = message.toLowerCase().split(" ");
@@ -87,13 +112,12 @@ client.on('chat', (channel, user, message, isSelf) => {
 
                 console.log(word);
 
-            	if(exist == 0){
+            	if(exist == 0 && !checkForSeveralLetters(word,3)){
 
     	        	fs.appendFile("ressources/dico.txt", word + "\n", function (err) {
 
-    				if (err) throw err;
-    				  console.log('It\'s saved!');
-
+    				    if (err) throw err;
+    				    console.log('It\'s saved!');
     				});
             	}
             });
