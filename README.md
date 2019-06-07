@@ -1,2 +1,2 @@
 # Philippobot
-A twhich bot
+A twich bot
